@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path
 from alkitab_backend.views.book_view import create_book, create_books_from_api, fetch_books
 from alkitab_backend.views.verse_view import create_verses_from_api, fetch_verse_by_abbr, create_verses_bulk_from_api, search_verse
+from alkitab_backend.views.devotion_view import create_devotion, fetch_devotion
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -12,4 +13,6 @@ urlpatterns = [
     path('api/gbkp/v1/verse/fetch/<str:abbr>/<int:chapter>/<str:version>', fetch_verse_by_abbr),
     path('api/gbkp/v1/verse/bulk-create-from-api', create_verses_bulk_from_api),
     path('api/gbkp/v1/verse/search', search_verse),
+    path('api/gbkp/v1/devotion/create', create_devotion),
+    path('api/gbkp/v1/devotion/fetch/<int:devotion_type_id>', fetch_devotion),
 ]
