@@ -3,6 +3,8 @@ from django.urls import path
 from alkitab_backend.views.book_view import create_book, create_books_from_api, fetch_books
 from alkitab_backend.views.verse_view import create_verses_from_api, fetch_verse_by_abbr, create_verses_bulk_from_api, search_verse
 from alkitab_backend.views.devotion_view import create_devotion, fetch_devotion
+from alkitab_backend.views.reading_plan_view import create_reading_plan, fetch_reading_plans, update_download
+from alkitab_backend.views.reading_plan_book_view import create_reading_plan_book, fetch_reading_plan_books
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -15,4 +17,9 @@ urlpatterns = [
     path('api/gbkp/v1/verse/search', search_verse),
     path('api/gbkp/v1/devotion/create', create_devotion),
     path('api/gbkp/v1/devotion/fetch/<int:devotion_type_id>', fetch_devotion),
+    path('api/gbkp/v1/reading-plan/create', create_reading_plan),
+    path('api/gbkp/v1/reading-plan/fetch', fetch_reading_plans),
+    path('api/gbkp/v1/reading-plan/update/<int:id>', update_download),
+    path('api/gbkp/v1/reading-plan-book/create', create_reading_plan_book),
+    path('api/gbkp/v1/reading-plan-book/fetch/<int:reading_plan_id>', fetch_reading_plan_books),
 ]

@@ -4,7 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.response import Response
 from rest_framework import status
 from alkitab_backend.models import Book, Verse, Chapter, Devotion, DevotionType
-from alkitab_backend.serializers import BookSerializer, VerseSerializer, DevotionSerializer
+from alkitab_backend.serializers import BookSerializer, DevotionSerializer
 
 @api_view(['POST'])
 def create_devotion(request):

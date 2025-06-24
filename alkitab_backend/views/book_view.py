@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from alkitab_backend.models import Book
 from alkitab_backend.serializers import BookSerializer
-# Ini test commit and push
+
 @api_view(['POST'])
 def create_book(request):
     try:

@@ -30,7 +30,7 @@ class Verse(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Verse {self.verse} of Chapter {self.chapter.chapter} in {self.chapter.book.name}"
+        return f"Verse {self.verse} of Chapter {self.chapter.chapter}"
     
 class DevotionType(models.Model):
     name = models.CharField(max_length=255, default="")
@@ -54,3 +54,28 @@ class Devotion(models.Model):
 
     def __str__(self):
         return f"Devotion '{self.title}' for {self.book.name} - Chapter {self.chapter.chapter}"
+    
+class ReadingPlan(models.Model):
+    title = models.CharField(max_length=255, default="")
+    description = models.TextField(default="")
+    length = models.IntegerField(default=0)
+    download = models.IntegerField(default=0)
+    finished = models.FloatField(default=0.0)
+    is_on_schedule = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Reading Plan: {self.title} ({self.length} days)"
+    
+class ReadingPlanBook(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="reading_plan_books")
+    reading_plan = models.ForeignKey(ReadingPlan, on_delete=models.CASCADE, related_name="reading_plan_books")
+    start_chapter = models.IntegerField(default=0)
+    end_chapter = models.IntegerField(default=0)
+    is_finished = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Reading Plan Book: {self.book.name} in {self.reading_plan.title}"
