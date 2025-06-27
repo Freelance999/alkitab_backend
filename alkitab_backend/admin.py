@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Book, Chapter, Verse, Devotion, DevotionType, ReadingPlan, ReadingPlanBook
+from .models import Book, Chapter, Verse, Devotion, DevotionType, ReadingPlan, ReadingPlanBook, SongBook, Song
 
 class BookAdmin(admin.ModelAdmin):
     list_display = ('id', 'abbr', 'name', 'chapter', 'created_at', 'updated_at')
@@ -22,6 +22,12 @@ class ReadingPlanAdmin(admin.ModelAdmin):
 class ReadingPlanBookAdmin(admin.ModelAdmin):
     list_display = ('id', 'book', 'reading_plan', 'start_chapter', 'end_chapter', 'is_finished', 'created_at', 'updated_at')
 
+class SongBookAdmin(admin.ModelAdmin):
+    list_display = ('id', 'number', 'title', 'song_book_name', 'author', 'song_url', 'created_at', 'updated_at')
+
+class SongAdmin(admin.ModelAdmin):
+    list_display = ('id', 'song_book', 'number', 'text', 'created_at', 'updated_at')
+
 admin.site.register(Book, BookAdmin)
 admin.site.register(Chapter, ChapterAdmin)
 admin.site.register(Verse, VerseAdmin)
@@ -29,3 +35,5 @@ admin.site.register(Devotion, DevotionAdmin)
 admin.site.register(DevotionType, DevotionTypeAdmin)
 admin.site.register(ReadingPlan, ReadingPlanAdmin)
 admin.site.register(ReadingPlanBook, ReadingPlanBookAdmin)
+admin.site.register(SongBook, SongBookAdmin)
+admin.site.register(Song, SongAdmin)

@@ -79,3 +79,25 @@ class ReadingPlanBook(models.Model):
 
     def __str__(self):
         return f"Reading Plan Book: {self.book.name} in {self.reading_plan.title}"
+    
+class SongBook(models.Model):
+    number = models.IntegerField(default=0)
+    title = models.CharField(max_length=255, default="")
+    song_book_name = models.CharField(max_length=255, default="")
+    author = models.CharField(max_length=255, default="", null=True, blank=True)
+    song_url = models.FileField(upload_to='songs/', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Song Book: {self.title} ({self.number})"
+    
+class Song(models.Model):
+    song_book = models.ForeignKey(SongBook, on_delete=models.CASCADE, related_name="songs")
+    number = models.IntegerField(default=0)
+    text = models.TextField(default="")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Song: {self.number}"
