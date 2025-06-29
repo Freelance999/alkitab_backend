@@ -33,7 +33,6 @@ def create_the_lords_prayer(request):
 @api_view(['GET'])
 def fetch_the_lords_prayers(request, version):
     try:
-        print("Fetching The Lord's Prayer for version:", version)
         prayers = TheLordsPrayer.objects.filter(version=version)
         if not prayers.exists():
             return Response({
