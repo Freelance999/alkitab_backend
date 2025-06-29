@@ -49,3 +49,8 @@ class SongSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = models.Song
         fields = '__all__'
+
+class TheLordsPrayerSerializer(serializers.ModelSerializer):
+    class Meta(object):
+        model = models.TheLordsPrayer
+        fields = '__all__'

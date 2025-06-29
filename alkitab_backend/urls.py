@@ -9,6 +9,7 @@ from alkitab_backend.views.reading_plan_view import create_reading_plan, fetch_r
 from alkitab_backend.views.reading_plan_book_view import create_reading_plan_book, fetch_reading_plan_books
 from alkitab_backend.views.song_book_view import create_song_book, fetch_song_books
 from alkitab_backend.views.song_view import create_song, fetch_songs
+from alkitab_backend.views.the_lords_prayer_view import fetch_the_lords_prayers
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,6 +31,8 @@ urlpatterns = [
     path('api/gbkp/v1/song-book/fetch/<str:song_book_name>', fetch_song_books),
     path('api/gbkp/v1/song/create', create_song),
     path('api/gbkp/v1/song/fetch/<int:song_book_id>', fetch_songs),
+    path('api/gbkp/v1/song/fetch/<int:song_book_id>', fetch_songs),
+    path('api/gbkp/v1/the-lords-prayer/fetch/<str:version>', fetch_the_lords_prayers),
 ]
 
 if settings.DEBUG:

@@ -101,3 +101,12 @@ class Song(models.Model):
 
     def __str__(self):
         return f"Song: {self.number}"
+    
+class TheLordsPrayer(models.Model):
+    text = models.TextField(default="")
+    version = models.CharField(max_length=255, default="tb")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"The Lord's Prayer ({self.version})"
