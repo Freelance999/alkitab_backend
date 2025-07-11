@@ -35,6 +35,8 @@ class ReadingPlanBookSerializer(serializers.ModelSerializer):
 
 class SongBookSerializer(serializers.ModelSerializer):
     song_url = serializers.SerializerMethodField()
+    duration = serializers.SerializerMethodField()
+
     class Meta(object):
         model = models.SongBook
         fields = '__all__'
@@ -44,6 +46,9 @@ class SongBookSerializer(serializers.ModelSerializer):
         if obj.song_url and hasattr(obj.song_url, 'url'):
             return request.build_absolute_uri(obj.song_url.url) if request else obj.song_url.url
         return None
+
+    def get_duration(self, obj):
+        return obj.get_duration()
 
 class SongSerializer(serializers.ModelSerializer):
     class Meta(object):

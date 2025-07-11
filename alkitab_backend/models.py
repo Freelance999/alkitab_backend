@@ -1,4 +1,7 @@
+import os
 from django.db import models
+from mutagen.mp3 import MP3
+from django.conf import settings
 
 class Book(models.Model):
     abbr = models.CharField(max_length=255, default="")
@@ -88,6 +91,16 @@ class SongBook(models.Model):
     song_url = models.FileField(upload_to='songs/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def get_duration(self):
+        if self.song_url and self.song_url.path:
+            file_path = os.path.join(settings.MEDIA_ROOT, self.song_url.name)
+            try:
+                audio = MP3(file_path)
+                return round(audio.info.length, 2) 
+            except Exception as e:
+                return None
+        return None
 
     def __str__(self):
         return f"Song Book: {self.title} ({self.number})"
