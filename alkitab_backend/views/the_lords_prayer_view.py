@@ -33,8 +33,8 @@ def create_the_lords_prayer(request):
 @api_view(['GET'])
 def fetch_the_lords_prayers(request, version):
     try:
-        prayers = TheLordsPrayer.objects.filter(version=version)
-        if not prayers.exists():
+        prayer = TheLordsPrayer.objects.filter(version=version).first()
+        if not prayer:
             return Response({
                 "status": status.HTTP_404_NOT_FOUND,
                 "message": "No The Lord's Prayer found for the specified version."
@@ -43,7 +43,7 @@ def fetch_the_lords_prayers(request, version):
         return Response({
             "status": status.HTTP_200_OK,
             "message": "The Lord's Prayers fetched successfully.",
-            "data": prayers.values('id', 'text', 'version', 'created_at', 'updated_at')
+            "data": TheLordsPrayerSerializer(prayer).data,
         }, status=status.HTTP_200_OK)
 
     except Exception as e:
