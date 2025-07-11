@@ -51,7 +51,11 @@ def fetch_verse_by_abbr(request, abbr, chapter, version):
             }, status=status.HTTP_404_NOT_FOUND)
 
         verses = Verse.objects.filter(chapter=chapter_obj, version=version).order_by('verse')
+        verse_content = Verse.objects.filter(chapter=chapter_obj, version=version, type="content").order_by('verse')
         data = VerseSerializer(verses, many=True).data
+        for verse in data:
+            verse['abbr'] = book.abbr
+        total_verse = VerseSerializer(verse_content, many=True).data
         if not data:
             return Response({
                 "status": status.HTTP_404_NOT_FOUND,
@@ -97,7 +101,8 @@ def fetch_verse_by_abbr(request, abbr, chapter, version):
         return Response({
             "status": status.HTTP_200_OK,
             "message": "All verses fetched successfully.",
-            'total_item': len(data),
+            "total_item": len(data),
+            "total_verse": len(total_verse),
             "data": {
                 "book": BookSerializer(book).data,
                 "chapter": chapter_obj.chapter,
