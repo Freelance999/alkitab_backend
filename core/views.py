@@ -6,8 +6,8 @@ def home(request):
     context = {
         'title': home.title,
         'text': home.text,
-        'phone': home.phone,
-        'email': home.email
+        'phone': home.phone if home.phone else "",
+        'email': home.email if home.email else ""
     }
     
     return render(request, 'index.html', context)
