@@ -21,6 +21,11 @@ class DevotionSerializer(serializers.ModelSerializer):
         model = models.Devotion
         fields = '__all__'
 
+class DevotionTypeSerializer(serializers.ModelSerializer):
+    class Meta(object):
+        model = models.DevotionType
+        fields = '__all__'
+
 class ReadingPlanSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = models.ReadingPlan

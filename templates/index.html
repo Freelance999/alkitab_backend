@@ -1,0 +1,27 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Alkitab GBKP + Kitab Ende Gereja Batak Karo Protestan</title>
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'assets/img/favicon.ico' %}">
+</head>
+<body>
+    <nav>
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+            <span>
+                <img src="{% static 'assets/img/app_logo.png' %}" alt="Logo" style="height:32px;vertical-align:middle;margin-right:10px;">
+                Alkitab GBKP + Kitab Ende Gereja Batak Karo Protestan.
+            </span>
+            <span style="margin-left: auto; font-weight: bold;">{{ title }}</span>
+        </div>
+    </nav>
+
+    <main>
+        <h1>{{ title }}</h1>
+        <p>{{ text|linebreaks }}</p>
+    </main>
+</body>
+</html>

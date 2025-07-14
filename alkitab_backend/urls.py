@@ -1,10 +1,10 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from alkitab_backend.views.book_view import create_book, create_books_from_api, fetch_books
 from alkitab_backend.views.verse_view import create_verses_from_api, fetch_verse_by_abbr, create_verses_bulk_from_api, search_verse
-from alkitab_backend.views.devotion_view import create_devotion, fetch_devotion
+from alkitab_backend.views.devotion_view import create_devotion, fetch_devotion, fetch_devotions, update_devotion_dates, fetch_devotion_types
 from alkitab_backend.views.reading_plan_view import create_reading_plan, fetch_reading_plans, update_download
 from alkitab_backend.views.reading_plan_book_view import create_reading_plan_book, fetch_reading_plan_books
 from alkitab_backend.views.song_book_view import create_song_book, fetch_song_books
@@ -13,6 +13,7 @@ from alkitab_backend.views.the_lords_prayer_view import fetch_the_lords_prayers
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('core.urls')),
     path('api/gbkp/v1/book/create-from-api', create_books_from_api),
     path('api/gbkp/v1/book/create', create_book),
     path('api/gbkp/v1/book/fetch', fetch_books),
@@ -22,6 +23,9 @@ urlpatterns = [
     path('api/gbkp/v1/verse/search', search_verse),
     path('api/gbkp/v1/devotion/create', create_devotion),
     path('api/gbkp/v1/devotion/fetch/<int:devotion_type_id>', fetch_devotion),
+    path('api/gbkp/v1/devotion/all-devotions/<int:devotion_type_id>', fetch_devotions),
+    path('api/gbkp/v1/devotion/update/<int:devotion_type_id>', update_devotion_dates),
+    path('api/gbkp/v1/devotion-type/fetch', fetch_devotion_types),
     path('api/gbkp/v1/reading-plan/create', create_reading_plan),
     path('api/gbkp/v1/reading-plan/fetch', fetch_reading_plans),
     path('api/gbkp/v1/reading-plan/update/<int:id>', update_download),

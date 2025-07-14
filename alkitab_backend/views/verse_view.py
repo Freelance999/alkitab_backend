@@ -38,10 +38,12 @@ def fetch_verse_by_abbr(request, abbr, chapter, version):
     try:
         book = Book.objects.filter(abbr=abbr).first()
         if not book:
-            return Response({
-                "status": status.HTTP_404_NOT_FOUND,
-                "message": "Book not found."
-            }, status=status.HTTP_404_NOT_FOUND)
+            book = Book.objects.filter(name=abbr).first()
+            if not book:
+                return Response({
+                    "status": status.HTTP_404_NOT_FOUND,
+                    "message": "Book not found."
+                }, status=status.HTTP_404_NOT_FOUND)
 
         chapter_obj = Chapter.objects.filter(book=book, chapter=chapter).first()
         if not chapter:

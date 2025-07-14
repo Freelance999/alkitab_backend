@@ -4,7 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.response import Response
 from rest_framework import status
 from alkitab_backend.models import Book, Verse, Chapter, Devotion, DevotionType
-from alkitab_backend.serializers import BookSerializer, DevotionSerializer
+from alkitab_backend.serializers import BookSerializer, DevotionSerializer, DevotionTypeSerializer, ChapterSerializer
 
 @api_view(['POST'])
 def create_devotion(request):
@@ -81,14 +81,95 @@ def fetch_devotion(request, devotion_type_id):
                 "message": "Devotion not found."
             }, status=status.HTTP_404_NOT_FOUND)
         
-        book = Book.objects.filter(id=devotion.book.id).first()
+        devotion_data = DevotionSerializer(devotion).data
+
+        chapter_obj = Chapter.objects.filter(id=devotion.chapter.id).first()
+        book_obj = Book.objects.filter(id=devotion.book.id).first()
+        devotion_data["chapter"] = ChapterSerializer(chapter_obj).data if chapter_obj else None
+        devotion_data["book"] = BookSerializer(book_obj).data if book_obj else None
+        
         return Response({
             "status": status.HTTP_200_OK,
             "message": "Devotion fetched successfully.",
-            "data": {
-                "devotion": DevotionSerializer(devotion).data,
-                "book": BookSerializer(book).data,
-            }
+            "data": devotion_data,
+        }, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        return Response({
+            "status": status.HTTP_500_INTERNAL_SERVER_ERROR,
+            "message": str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['GET'])
+def fetch_devotions(request, devotion_type_id):
+    try:
+        devotions = Devotion.objects.filter(devotion_type_id=devotion_type_id).order_by('date')
+
+        return Response({
+            "status": status.HTTP_200_OK,
+            "message": "Devotion fetched successfully.",
+            "total_item": len(devotions),
+            "data": DevotionSerializer(devotions, many=True).data,
+        }, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        return Response({
+            "status": status.HTTP_500_INTERNAL_SERVER_ERROR,
+            "message": str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['PUT'])
+def update_devotion_dates(request, devotion_type_id):
+    try:
+        start_date_str = request.data.get("start_date")
+        if not start_date_str:
+            return Response({
+                "status": status.HTTP_400_BAD_REQUEST,
+                "message": "Date is required."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            start_date = datetime.datetime.strptime(start_date_str, "%Y-%m-%d").date()
+        except ValueError:
+            return Response({
+                "status": status.HTTP_400_BAD_REQUEST,
+                "message": "Invalid date format. Use YYYY-MM-DD."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        devotions = Devotion.objects.filter(devotion_type_id=devotion_type_id).order_by('date')
+        if not devotions.exists():
+            return Response({
+                "status": status.HTTP_404_NOT_FOUND,
+                "message": "No devotions found for this type."
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        updated_count = 0
+        for idx, devotion in enumerate(devotions):
+            devotion.date = start_date + datetime.timedelta(days=idx)
+            devotion.save()
+            updated_count += 1
+
+        return Response({
+            "status": status.HTTP_200_OK,
+            "message": f"{updated_count} devotion dates updated successfully.",
+        }, status=status.HTTP_200_OK)
+    
+    except Exception as e:
+        return Response({
+            "status": status.HTTP_500_INTERNAL_SERVER_ERROR,
+            "message": str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+def fetch_devotion_types(request):
+    try:
+        devotions = DevotionType.objects.all()
+
+        return Response({
+            "status": status.HTTP_200_OK,
+            "message": "Devotion type fetched successfully.",
+            "total_item": len(devotions),
+            "data": DevotionTypeSerializer(devotions, many=True).data,
         }, status=status.HTTP_200_OK)
 
     except Exception as e:
