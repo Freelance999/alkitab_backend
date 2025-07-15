@@ -11,7 +11,7 @@ class Book(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.abbr} - {self.name}"
+        return self.name
     
 class Chapter(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="chapters")
@@ -21,7 +21,7 @@ class Chapter(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Chapter {self.chapter} of {self.book.name}"
+        return f"{self.book.name} BAB {self.chapter}"
     
 class Verse(models.Model):
     chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE, related_name="verses")
@@ -33,7 +33,7 @@ class Verse(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Verse {self.verse} of Chapter {self.chapter.chapter}"
+        return f"BAB {self.chapter.chapter} Ayat {self.verse}"
     
 class DevotionType(models.Model):
     name = models.CharField(max_length=255, default="")
@@ -41,7 +41,7 @@ class DevotionType(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Devotion Type: {self.name}"
+        return self.name
     
 class Devotion(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="devotions")
@@ -56,7 +56,7 @@ class Devotion(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Devotion '{self.title}' for {self.book.name} - Chapter {self.chapter.chapter}"
+        return f"{self.title} - {self.book.name} BAB {self.chapter.chapter}"
     
 class ReadingPlan(models.Model):
     title = models.CharField(max_length=255, default="")
@@ -69,7 +69,7 @@ class ReadingPlan(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Reading Plan: {self.title} ({self.length} days)"
+        return f"{self.title} - {self.length} hari"
     
 class ReadingPlanBook(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="reading_plan_books")
@@ -81,7 +81,7 @@ class ReadingPlanBook(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Reading Plan Book: {self.book.name} in {self.reading_plan.title}"
+        return f"{self.reading_plan.title} - {self.book.name}"
     
 class SongBook(models.Model):
     number = models.IntegerField(default=0)
@@ -103,7 +103,7 @@ class SongBook(models.Model):
         return None
 
     def __str__(self):
-        return f"Song Book: {self.title} ({self.number})"
+        return f"{self.number}. {self.title}"
     
 class Song(models.Model):
     song_book = models.ForeignKey(SongBook, on_delete=models.CASCADE, related_name="songs")
@@ -113,7 +113,7 @@ class Song(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Song: {self.number}"
+        return str(self.number)
     
 class TheLordsPrayer(models.Model):
     text = models.TextField(default="")
@@ -122,4 +122,4 @@ class TheLordsPrayer(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"The Lord's Prayer ({self.version})"
+        return f"Versi {self.version}"
